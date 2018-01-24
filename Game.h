@@ -12,9 +12,9 @@ public:
 	int getLives();
 	int getLoops();
 	int getScore();
-	void setLives();
-	void setLoops();
-	void setScore();
+	void setLives(int);
+	void setLoops(int);
+	void setScore(int);
 
 private:
 	int lives, loops, score;
