@@ -1,0 +1,4 @@
+Create platforms that arent grass (i.e. the orange platforms and platforms for subsequent levels)
+Player movement
+movement animation
+bounding boxes on platforms
