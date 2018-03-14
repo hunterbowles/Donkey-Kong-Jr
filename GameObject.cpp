@@ -11,6 +11,7 @@ GameObject::GameObject(double xVal, double yVal)
 	gravity = 2;
 	type = 0;
 	team = 1;
+	onVine = false;
 	/*
 	0 = Nothing
 	1 = Platform
@@ -26,6 +27,8 @@ GameObject::GameObject()
 	vY = 0;
 	gravity = 2;
 	type = 0;
+	team = 1;
+	onVine = false;
 }
 
 
@@ -59,7 +62,10 @@ bool GameObject::collision(GameObject * other)
 	else if (boundingBox.intersects(other->boundingBox))
 	{
 		return true;
+
 	}
+
+
 }
 
 
@@ -71,9 +77,9 @@ void GameObject::die()
 
 void GameObject::useGravity()
 {
-	if(type == 0)
-		setVY(getVY() + getGravity());
-	if (type == 2)
+	if(!onVine)
+		setVY(getVY() + gravity);
+	if (onVine)
 		setVY(0);
 }
 
@@ -103,13 +109,29 @@ sf::Sprite GameObject::getSprite()
 {
 	return sprite;
 }
-int GameObject::getTeam()
-{
-	return team;
-}
 int GameObject::getType()
 {
 	return type;
+}
+sf::FloatRect GameObject::getBB()
+{
+	return boundingBox;
+}
+bool GameObject::getOnVine()
+{
+	return onVine;
+}
+bool GameObject::getOnPlat()
+{
+	return onPlat;
+}
+bool GameObject::getTouchingEnemy()
+{
+	return touchingEnemy;
+}
+int GameObject::getTeam()
+{
+	return team;
 }
 
 //Setters
@@ -133,10 +155,6 @@ void GameObject::setSpritePos()
 {
 	sprite.setPosition(x, y);
 }
-sf::FloatRect GameObject::getBB()
-{
-	return boundingBox;
-}
 void GameObject::setBB(sf::FloatRect BB)
 {
 	boundingBox = BB;
@@ -148,6 +166,18 @@ void GameObject::setSprite(sf::Sprite s)
 void GameObject::setType(int i)
 {
 	type = i;
+}
+void GameObject::setOnVine(bool i)
+{
+	onVine = i;
+}
+void GameObject::setOnPlat(bool i)
+{
+	onPlat = i;
+}
+void GameObject::setTouchingEnemy(bool i)
+{
+	touchingEnemy = i;
 }
 void GameObject::setTeam(int i)
 {

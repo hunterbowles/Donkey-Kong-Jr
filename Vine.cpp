@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Vine.h"
+#include "Chomp.h"
 #include <iostream>
+#include <vector>
 
 Vine::Vine(int l, double x, double y) : GameObject(x, y)
 {
@@ -28,25 +30,52 @@ Vine::~Vine()
 {
 }
 
+int Vine::allVines(std::vector<Vine*> vines, GameObject * other)
+{
+	int numVines = 0;
+
+	for (int i = 0; i < vines.size(); i++)
+	{
+		if (vines.at(i)->collision(other))
+		{
+			numVines++;
+		}
+	}
+	return numVines;
+}
+
 
 bool Vine::collision(GameObject * other)
 {
-	
+	bool x = false;
 	setBB(sf::FloatRect(sf::Vector2f(getX() + 9, getY()),
 		sf::Vector2f(2 * 3, 8 * length * 3)));
 
 	//Check top and sides.
 	if (getBB().intersects(other->getBB()))
 	{
-		if (other->getType() != 2)
+		if (!other->getOnVine())
 		{
-			other->setType(2);
 			other->setX(getX() - 20);
 		}
-		return true;
+		x = true;
+		other->setOnVine(true);
 	}
-
-	return false;
+	else if(Chomp* c = dynamic_cast<Chomp*>(other))
+	{
+		if (dynamic_cast<Chomp*>(other)->getVineBox().intersects(getBB()))
+		{
+			dynamic_cast<Chomp*>(other)->vineIntersect(this);
+			x = true;
+		}
+	}
+	
+	if(!x)
+	{
+		other->setOnVine(false);
+		x = false;
+	}
+	return x;
 }
 
 

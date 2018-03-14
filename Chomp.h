@@ -7,12 +7,14 @@ class Chomp : public GameObject
 public:
 	Chomp();
 	Chomp(int, int);
-	bool vineIntersect(Vine);
+	bool vineIntersect(Vine *);
 	//void goDown();
 	//void fallOff();
 	void step();
 	void changeRotation(double);
 	~Chomp();
+
+	sf::FloatRect getVineBox();
 
 private:
 	sf::Sprite open, closed;

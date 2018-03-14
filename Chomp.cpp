@@ -49,7 +49,7 @@ void Chomp::step()
 	setBB(getSprite().getGlobalBounds());
 	vineBox = sf::FloatRect(getX() + 12, getY() + 24 + 24, 3, 3);
 
-	if (getType() != 2)
+	if (!getOnVine())
 	{
 		useGravity();
 		setVX(1);
@@ -73,7 +73,7 @@ void Chomp::step()
 	{
 		setY(0);
 		onVine = false;
-		setX(200);
+		setX(10);
 	}
 
 	//Bad and inefficient pls fix
@@ -95,21 +95,21 @@ void Chomp::step()
 }
 
 
-bool Chomp::vineIntersect(Vine v)
+bool Chomp::vineIntersect(Vine * v)
 {
-	if (vineBox.intersects(v.getBB()) &&  !onVine)
+	if (vineBox.intersects(v->getBB()) && !onVine)
 	{
 		onVine = true;
 		setY(getY() + 25);
-		setType(2);
 		open.setRotation(90);
 		closed.setRotation(90);
-		setX(getX() + 25);
+		setX(getX() + 20);
+  		setVX(0);
 		return true;
 	}
-	else if (getBB().intersects(v.getBB()) && onVine)
+	else if (getBB().intersects(v->getBB()) && onVine)
 	{
-		setType(2);		
+		setType(2);
 		return true;
 	}
 
@@ -125,6 +125,12 @@ void Chomp::changeRotation(double angle)
 		setX(getX() - 25);
 		onVine = false;
 	}
+}
+
+
+sf::FloatRect Chomp::getVineBox()
+{
+	return vineBox;
 }
 
 Chomp::~Chomp()

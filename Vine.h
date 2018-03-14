@@ -9,8 +9,9 @@ public:
 	Vine(int l, double x, double y);
 	~Vine();
 	bool collision(GameObject * other);
-	void drawVine(sf::RenderWindow& window);
+	void drawVine(sf::RenderWindow & window);
 	void setSprite(sf::Sprite sprite);
+	int allVines(std::vector<Vine*> vines, GameObject * other);
 private:
 	std::vector<sf::Sprite> sprites;
 	sf::Texture texture;

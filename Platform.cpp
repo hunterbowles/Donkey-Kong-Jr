@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Platform.h"
+#include "Chomp.h"
 #include <iostream>
 
 Platform::Platform(int l, double x, double y) : GameObject(x, y)
@@ -21,8 +22,6 @@ Platform::Platform(int l, double x, double y) : GameObject(x, y)
 		sprites.at(i).setColor(sf::Color::White);
 		sprites.at(i).setPosition(getX() + 8 * 3 * i, getY());
 	}
-
-
 }
 
 
@@ -42,23 +41,25 @@ bool Platform::collision(GameObject * other)
 		&& (other->getX() + other->getBB().width) >= getX()
 		&& other->getX() <= (getX() + getBB().width))
 	{
+		if (Chomp* c = dynamic_cast<Chomp*>(other))
+			dynamic_cast<Chomp*>(other)->changeRotation(0);
 		other->setVY(0);
-		other->setType(1);
 		other->setY(getY() - other->getBB().height);
+		other->setOnPlat(true);
 		return true;
 	}
 	//Check bottom and sides.
-	else if (other->getY() >= (getY() + getBB().height)
-		&& (other->getY() + other->getVY()) <= (getY() + getBB().height)
+	else if (other->getY() >= (getY() + 24)
+		&& (other->getY() + other->getVY()) <= (getY() + 24)
 		&& (other->getX() + other->getBB().width) >= getX()
 		&& other->getX() <= (getX() + getBB().width))
 	{
 		other->setVY(0);
-		other->setType(0);
-		other->setY(getY() + getBB().height);
+		other->setY(getY() + 28);
+		other->setOnPlat(true);
 		return true;
 	}
-
+	other->setOnPlat(false);
 	return false;
 }
 
