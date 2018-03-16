@@ -3,3 +3,5 @@ Make Chomps collide
 Make orange chomp able to go up vines
 
 Code death cases
+
+Fix freezing on vine when an input is held
