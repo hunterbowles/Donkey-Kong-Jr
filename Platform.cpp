@@ -59,7 +59,7 @@ bool Platform::collision(GameObject * other)
 		other->setOnPlat(true);
 		return true;
 	}
-	other->setOnPlat(false);
+	//other->setOnPlat(false);
 	return false;
 }
 

@@ -54,7 +54,7 @@ bool Vine::collision(GameObject * other)
 	//Check top and sides.
 	if (getBB().intersects(other->getBB()))
 	{
-		if (!other->getOnVine())
+		if (!other->getOnVine() && other->getTeam() == 1)
 		{
 			other->setX(getX() - 20);
 		}
@@ -72,7 +72,7 @@ bool Vine::collision(GameObject * other)
 	
 	if(!x)
 	{
-		other->setOnVine(false);
+		//other->setOnVine(false);
 		x = false;
 	}
 	return x;

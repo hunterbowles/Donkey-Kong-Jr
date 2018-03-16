@@ -87,6 +87,7 @@ Player::Player(double x, double y) : GameObject(x, y)
 		16: dualClimb[1]
 	*/
 	spriteType = 1;
+	setTeam(1);
 }
 Player::~Player()
 {

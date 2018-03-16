@@ -10,7 +10,7 @@ GameObject::GameObject(double xVal, double yVal)
 	vY = 0;
 	gravity = 2;
 	type = 0;
-	team = 1;
+	team = 0;
 	onVine = false;
 	/*
 	0 = Nothing
@@ -27,7 +27,7 @@ GameObject::GameObject()
 	vY = 0;
 	gravity = 2;
 	type = 0;
-	team = 1;
+	team = 0;
 	onVine = false;
 }
 

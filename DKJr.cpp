@@ -13,7 +13,7 @@
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800, 800), "DK Jr");
-	window.setFramerateLimit(40);
+	window.setFramerateLimit(60);
 	Player* p = new Player(20, 20);
 
 	std::vector<Platform*> plats;
@@ -40,6 +40,12 @@ int main()
 		//Reset
 		p->input();
 		p->setOnPlat(false);
+
+		for (int i = 0; i < chomps.size(); i++)
+		{
+			chomps.at(i)->setOnVine(false);
+			chomps.at(i)->setOnVine(false);
+		}
 
 		//Check collisions with the platforms
 		//and draw platforms.

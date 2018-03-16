@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Chomp.h"
 #include <iostream>
+#include <cstdlib>
 
 
 Chomp::Chomp()
@@ -97,19 +98,14 @@ void Chomp::step()
 
 bool Chomp::vineIntersect(Vine * v)
 {
-	if (vineBox.intersects(v->getBB()) && !onVine)
+	if (vineBox.intersects(v->getBB()) && !onVine && rand() % 10 == 0)
 	{
 		onVine = true;
-		setY(getY() + 25);
+		setY(getY() + 50);
 		open.setRotation(90);
 		closed.setRotation(90);
-		setX(getX() + 20);
-  		setVX(0);
-		return true;
-	}
-	else if (getBB().intersects(v->getBB()) && onVine)
-	{
-		setType(2);
+		setX(getX() + 30);
+		setVX(0);
 		return true;
 	}
 
