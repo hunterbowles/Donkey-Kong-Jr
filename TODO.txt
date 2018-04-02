@@ -1,9 +1,7 @@
-Fix going  up too fast and going through the platform
-
-Fix grabbing bug
-
-Fix the collision if statement work
-
-Make Chomps collide
-
-Make Chomps able to decide wich vine to go down
+MAKE CHOMPS ABLE TO GO LEFT
+FRUIT
+BETTER SCORE
+DEATH ANIMATION
+BETTER CHOMP SPAWNING
+RED CHOMPS
+HIGHSCORES
