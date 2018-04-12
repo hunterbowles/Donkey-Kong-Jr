@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 MAKE CHOMPS ABLE TO GO LEFT
 FRUIT
 BETTER SCORE
@@ -5,3 +6,12 @@ DEATH ANIMATION
 BETTER CHOMP SPAWNING
 RED CHOMPS
 HIGHSCORES
+=======
+Make Chomps collide
+
+Make orange chomp able to go up vines
+
+Code death cases
+
+Fix freezing on vine when an input is held
+>>>>>>> bcb40be1bdbca1d83534366c06d160a3f05fb510
