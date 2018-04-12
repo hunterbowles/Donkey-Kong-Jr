@@ -8,10 +8,11 @@ GameObject::GameObject(double xVal, double yVal)
 	y = yVal;
 	vX = 0;
 	vY = 0;
-	gravity = 2;
+	gravity = 1;
 	type = 0;
 	team = 0;
 	onVine = false;
+	touchingEnemy = false;
 	/*
 	0 = Nothing
 	1 = Platform
@@ -62,16 +63,13 @@ bool GameObject::collision(GameObject * other)
 	else if (boundingBox.intersects(other->boundingBox))
 	{
 		return true;
-
 	}
-
-
 }
 
 
 void GameObject::die()
 {
-
+	
 }
 
 

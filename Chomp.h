@@ -8,6 +8,7 @@ public:
 	Chomp();
 	Chomp(int, int);
 	bool vineIntersect(Vine *);
+	bool getOnVineAgain();
 	//void goDown();
 	//void fallOff();
 	void step();
@@ -16,7 +17,7 @@ public:
 
 	sf::FloatRect getVineBox();
 
-private:
+protected:
 	sf::Sprite open, closed;
 	sf::Texture texture;
 	sf::FloatRect boundingBox, vineBox;

@@ -16,7 +16,11 @@ Chomp::Chomp(int x, int y) : GameObject(x, y)
 
 	onVine = false;
 
-	setVX(1);
+	int chance = rand() % 2;
+	if (chance == 1)
+		setVX(1);
+	else
+		setVX(-1);
 	setTeam(2);
 
 	open.setTexture(texture);
@@ -35,6 +39,7 @@ Chomp::Chomp(int x, int y) : GameObject(x, y)
 
 	setSprite(open);
 	spriteType = 0;
+	setTouchingEnemy(false);
 	counter = 0;
 }
 
@@ -48,12 +53,11 @@ void Chomp::step()
 
 	//Update the bounding box.
 	setBB(getSprite().getGlobalBounds());
-	vineBox = sf::FloatRect(getX() + 12, getY() + 24 + 24, 3, 3);
+	vineBox = sf::FloatRect(getX() + 12, getY() + 48, 1, 1);
 
 	if (!getOnVine())
 	{
 		useGravity();
-		setVX(1);
 	}
 	else
 	{
@@ -72,9 +76,15 @@ void Chomp::step()
 
 	if (getY() > 800)
 	{
-		setY(0);
+		setY(120);
 		onVine = false;
-		setX(10);
+		setX(80);
+
+		int chance = rand() % 2;
+		if (chance == 1)
+			setVX(1);
+		else
+			setVX(-1);
 	}
 
 	//Bad and inefficient pls fix
@@ -129,6 +139,14 @@ sf::FloatRect Chomp::getVineBox()
 	return vineBox;
 }
 
+
+bool Chomp::getOnVineAgain()
+{
+	return onVine;
+}
+
+
 Chomp::~Chomp()
 {
 }
+

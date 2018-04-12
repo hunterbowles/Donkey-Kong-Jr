@@ -4,6 +4,17 @@
 #include <iostream>
 #include <vector>
 
+
+bool isChomp(GameObject *thing)
+{
+	Chomp *test = dynamic_cast<Chomp*>(thing);
+	//std::cout << test << std::endl;
+	if (test == NULL)
+		return false;
+	return true;
+}
+
+
 Vine::Vine(int l, double x, double y) : GameObject(x, y)
 {
 	//TODO: MAKE THIS ABLE TO TAKE DIFFERENT TYPES OF PLATFORMS
@@ -30,7 +41,7 @@ Vine::~Vine()
 {
 }
 
-int Vine::allVines(std::vector<Vine*> vines, GameObject * other)
+int Vine::allVines(std::vector<Vine*> vines, GameObject *other)
 {
 	int numVines = 0;
 
@@ -45,14 +56,18 @@ int Vine::allVines(std::vector<Vine*> vines, GameObject * other)
 }
 
 
-bool Vine::collision(GameObject * other)
+bool Vine::collision(GameObject *other)
 {
 	bool x = false;
-	setBB(sf::FloatRect(sf::Vector2f(getX() + 9, getY()),
-		sf::Vector2f(2 * 3, 8 * length * 3)));
+	setBB(sf::FloatRect(sf::Vector2f(getX() + 10, getY()),
+		sf::Vector2f(1.75 * 3, 8 * length * 3)));
+
+	//Put some log output here to see what object you are talking about.
+	//std::cout << other->getTeam() << std::endl;
+	//Now put some log output in isChomp() or rather just catch the return and log that.
 
 	//Check top and sides.
-	if (getBB().intersects(other->getBB()))
+	if (!isChomp(other) && getBB().intersects(other->getBB()))
 	{
 		if (!other->getOnVine() && other->getTeam() == 1)
 		{
@@ -61,25 +76,25 @@ bool Vine::collision(GameObject * other)
 		x = true;
 		other->setOnVine(true);
 	}
-	else if(Chomp* c = dynamic_cast<Chomp*>(other))
+	else if (Chomp* c = dynamic_cast<Chomp*>(other))
 	{
+		if (getBB().intersects(other->getBB()) 
+			&& dynamic_cast<Chomp*>(other)->getOnVineAgain() == true)
+		{
+			other->setOnVine(true);
+		}
+
 		if (dynamic_cast<Chomp*>(other)->getVineBox().intersects(getBB()))
 		{
 			dynamic_cast<Chomp*>(other)->vineIntersect(this);
 			x = true;
 		}
 	}
-	
-	if(!x)
-	{
-		//other->setOnVine(false);
-		x = false;
-	}
 	return x;
 }
 
 
-void Vine::drawVine(sf::RenderWindow & window)
+void Vine::drawVine(sf::RenderWindow &window)
 {
 	for (int i = 0; i < length; i++)
 	{

@@ -14,6 +14,7 @@ public:
 	void changeSprite();
 	void step();
 	void doubleCollide(Vine, Vine);
+	void die();
 
 	//Getters and Setters
 	int getLives();
@@ -28,7 +29,6 @@ public:
 private:
 	int lives, score, counter, spriteType;
 	bool dualCollide;
-	sf::Sprite right[3], left[3], up[4], jump[2], grab[2];
+	sf::Sprite right[3], left[3], up[4], jump[4], grab[2];
 	sf::Texture texture;
-	sf::FloatRect boundingBox;
 };

@@ -15,7 +15,11 @@ Player::Player(double x, double y) : GameObject(x, y)
 	{
 		up[i].setTexture(texture);
 		up[i].setScale(sf::Vector2f(2, 2));
-		up[i].setColor(sf::Color::White);
+		up[i].setColor(sf::Color::White);	
+
+		jump[i].setTexture(texture);
+		jump[i].setScale(sf::Vector2f(2, 2));
+		jump[i].setColor(sf::Color::White);
 
 		//There is not a fourth right or left sprite.
 		//Make sure that you are not going out of bounds.
@@ -34,10 +38,6 @@ Player::Player(double x, double y) : GameObject(x, y)
 		//Make sure that you are not going out of bounds.
 		if (i < 2)
 		{
-			jump[i].setTexture(texture);
-			jump[i].setScale(sf::Vector2f(2, 2));
-			jump[i].setColor(sf::Color::White);
-
 			grab[i].setTexture(texture);
 			grab[i].setScale(sf::Vector2f(2, 2));
 			grab[i].setColor(sf::Color::White);
@@ -60,6 +60,8 @@ Player::Player(double x, double y) : GameObject(x, y)
 
 	jump[0].setTextureRect(sf::IntRect(76, 279, 28, 17));
 	jump[1].setTextureRect(sf::IntRect(0, 297, 28, 17));
+	jump[2].setTextureRect(sf::IntRect(104, 279, -28, 17));
+	jump[3].setTextureRect(sf::IntRect(28, 297, -28, 17));
 
 	grab[0].setTextureRect(sf::IntRect(71, 297, 32, 17));
 	grab[1].setTextureRect(sf::IntRect(103, 297, -32, 17));
@@ -67,31 +69,32 @@ Player::Player(double x, double y) : GameObject(x, y)
 	setSprite(right[0]);
 	counter = 1;
 	dualCollide = false;
-
-	/*SpriteType rules:
-		1: right[0]
-		2: right[1]
-		3: right[2]
-		4: left[0]
-		5: left[1]
-		6: left[2]
-		7: up[0]
-		8: up[1]
-		9: up[2]
-		10: up[3]
-		11: jump[0]
-		12: jump[1]
-		13: grab[0]
-		14: grab[1]
-		15: dualClimb[0]
-		16: dualClimb[1]
-	*/
 	spriteType = 1;
 	setTeam(1);
+	setLives(3);
+	setScore(0);
 }
 Player::~Player()
 {
 }
+/*SpriteType rules:
+1: right[0]
+2: right[1]
+3: right[2]
+4: left[0]
+5: left[1]
+6: left[2]
+7: up[0]
+8: up[1]
+9: up[2]
+10: up[3]
+11: jump[0]
+12: jump[1]
+13: jump[2]
+14: jump[3]
+15: grab[0]
+16: grab[1]
+*/
 
 
 //Move Donky Kong Jr and change sprites to give
@@ -103,21 +106,23 @@ void Player::input()
 	{
 		if (!getOnVine())
 		{
-			setVX(5);
+			setVX(2);
 			counter++;
 			//Don't change the sprite every frame. DK Jr looks
 			//like he is moving really fast if you do.
-			if (counter % 4 == 0)
-				spriteType = (counter % 3)  + 1;
+			if (counter % 4 == 0 && getOnPlat())
+				spriteType = (counter % 3) + 1;
+			else if (!getOnPlat())
+				spriteType = 11;
 		}
 		else
 		{
-			if (spriteType != 14)
+			if (spriteType != 16)
 			{
-				if (spriteType == 13)
+				if (spriteType == 15)
 				{
 					spriteType = 7;
-					setX(getX() + 20 + 6);
+					setX(getX() + 26);
 				}
 				else if (spriteType == 7 || spriteType == 8)
 				{
@@ -126,23 +131,22 @@ void Player::input()
 				}
 				else if (spriteType == 9 || spriteType == 10)
 				{
-					spriteType = 14;
-					setX(getX() + 20 - 14);
+					spriteType = 16;
+					setX(getX() + 6);
 				}
 			}
-			else if (!dualCollide && (spriteType == 14 || spriteType == 13))
+			else if (!dualCollide && spriteType == 16)
 			{
 				spriteType = 11;
-				setX(getX() + 34);
+				setX(getX() + 15);
 			}
-			else if (dualCollide && (spriteType == 14 || spriteType == 13))
+			else if (dualCollide && spriteType == 16)
 			{
 				spriteType = 7;
-				setX(getX() + 20 + 6);
+				setX(getX() + 30);
 			}
 			//Make sure that the Left arrow is not pressed more than once.
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {}
-
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -151,19 +155,21 @@ void Player::input()
 		//like he is moving really fast if you do.
 		if (!getOnVine())
 		{
-			setVX(-5);
+			setVX(-2);
 			counter++;
-			if (counter % 4 == 0)
+			if (counter % 4 == 0 && getOnPlat())
 				spriteType = (counter % 3) + 4;
+			else if (!getOnPlat())
+				spriteType = 13;
 		}
 		else
 		{
-			if (spriteType != 13 && (spriteType != 14 && !dualCollide))
+			if (spriteType != 15)
 			{
-				if (spriteType == 14)
+				if (spriteType == 16)
 				{
 					spriteType = 9;
-					setX(getX() - 20 + 14);
+					setX(getX() - 6);
 				}
 				else if (spriteType == 9 || spriteType == 10)
 				{
@@ -172,19 +178,19 @@ void Player::input()
 				}
 				else if (spriteType == 7 || spriteType == 8)
 				{
-					spriteType = 13;
-					setX(getX() - 20 - 6);
+					spriteType = 15;
+					setX(getX() - 26);
 				}
 			}
-			else if (!dualCollide && (spriteType == 14 || spriteType == 13))
+			else if (!dualCollide && spriteType == 15)
 			{
-				spriteType = 11;
-				setX(getX() - 34);
+				spriteType = 13;
+				setX(getX() - 15);
 			}
-			else if (dualCollide && (spriteType == 14 || spriteType == 13))
+			else if (dualCollide && spriteType == 15)
 			{
 				spriteType = 9;
-				setX(getX() - 5);
+				setX(getX() - 6);
 			}
 			//Make sure that the Left arrow is not pressed more than once.
 			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {}
@@ -196,9 +202,9 @@ void Player::input()
 		{
 			//Don't change the sprite every frame. DK Jr looks
 			//like he is moving really fast if you do.
-			setVY(-10);
+			setVY(-1);
 			if (dualCollide)
-				setVY(getVY() * 1.5);
+				setVY(-3);
 			counter++;
 			if (counter % 3 == 0)
 			{
@@ -208,7 +214,7 @@ void Player::input()
 					else
 						spriteType = (counter % 2) + 9;
 				else
-					spriteType = (counter % 2) + 13;
+					spriteType = (counter % 2) + 15;
 			}
 		}
 	}
@@ -219,9 +225,9 @@ void Player::input()
 			//Don't change the sprite every frame. DK Jr looks
 			//like he is moving really fast if you do.
 
-			setVY(10);
+			setVY(3);
 			if(dualCollide)
-				setVY(getVY() * 1.5);
+				setVY(3);
 			counter++;
 			if (counter % 3 == 0)
 			{
@@ -231,7 +237,7 @@ void Player::input()
 					else
 						spriteType = (counter % 2) + 9;
 				else
-					spriteType = (counter % 2) + 13;
+					spriteType = (counter % 2) + 15;
 			}
 		}
 	}
@@ -241,8 +247,11 @@ void Player::input()
 		//the ground
 		if (getOnPlat())
 		{
-			setVY(-20);
-			spriteType = 11;
+			setVY(-10);
+			if (spriteType <= 3)
+				spriteType = 11;
+			else if (spriteType >= 4)
+				spriteType = 13;
 		}
 		//Need to setup bounding box to tell when to switch
 		//Sprite to second jump
@@ -250,12 +259,6 @@ void Player::input()
 		//NOT FINISHED
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		setX(sf::Mouse::getPosition().x);
-		setY(sf::Mouse::getPosition().y);
-		setSpritePos();
-	}
 	changeSprite();
 }
 
@@ -301,9 +304,15 @@ void Player::changeSprite()
 		setSprite(jump[1]);
 		break;
 	case 13:
-		setSprite(grab[0]);
+		setSprite(jump[2]);
 		break;
 	case 14:
+		setSprite(jump[3]);
+		break;
+	case 15:
+		setSprite(grab[0]);
+		break;
+	case 16:
 		setSprite(grab[1]);
 		break;
 	default:
@@ -314,15 +323,22 @@ void Player::changeSprite()
 
 void Player::step()
 {
-	if (getOnVine() && (spriteType != 13 && spriteType != 8 && spriteType != 7 && spriteType != 10 && spriteType != 9 && spriteType != 14))
+	if (getOnVine() && (spriteType != 15 
+		&& spriteType != 8 && spriteType != 7 
+		&& spriteType != 10 && spriteType != 9 && spriteType != 16))
 		spriteType = 7;
-	else if (getOnVine() && (spriteType != 13 && spriteType != 8 && spriteType != 7 && spriteType != 10 && spriteType != 9 && spriteType != 14) && (spriteType == 0 || spriteType == 1 || spriteType == 2))
+	else if (getOnVine() && (spriteType != 15 && spriteType != 8 
+		&& spriteType != 7 && spriteType != 10 
+		&& spriteType != 9 && spriteType != 16)
+		&& (spriteType == 0 || spriteType == 1 || spriteType == 2))
 		spriteType = 9;
 
-	if (getOnPlat() && !(spriteType >= 1 && spriteType <= 6))
+	if (getOnPlat() && (spriteType >= 11 && spriteType <= 14))
 	{
-		setY(getY() - 2);
-		spriteType = 1;
+		if (spriteType == 11 || spriteType == 12)
+			spriteType = 1;
+		else if (spriteType == 13 || spriteType == 14)
+			spriteType = 4;
 	}
 
 	GameObject::step();
@@ -335,6 +351,21 @@ void Player::doubleCollide(Vine v, Vine vv)
 	
 	if(counter % 3 == 0)
 		spriteType = (counter % 2) + 13;
+}
+
+
+void Player::die()
+{
+	if (getLives() != 1000)
+	{
+		setLives(getLives() - 1);
+		setX(20);
+		setY(500);
+	}
+	else
+	{
+		std::cout << "GG";
+	}
 }
 
 

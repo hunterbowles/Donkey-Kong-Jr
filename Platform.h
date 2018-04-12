@@ -6,7 +6,7 @@
 class Platform : public GameObject
 {
 public:
-	Platform(int l, double x, double y);
+	Platform(int l, double x, double y, int type);
 	~Platform();
 	bool collision(GameObject * other);
 	void drawPlat(sf::RenderWindow& window);
@@ -16,5 +16,4 @@ private:
 	std::vector<sf::Sprite> sprites;
 	sf::Texture texture;
 	int length;
-	sf::FloatRect boundingBox;
 };

@@ -53,8 +53,8 @@ void Game::play()
 	while (window.isOpen())
 	{
 		if (p->getLives() >= 0)
-		{	
-			
+		{
+
 			nextStep();
 			platformCheck();
 			vineCheck();
@@ -90,7 +90,7 @@ void Game::nextStep()
 		chomps.at(i)->setOnVine(false);
 	for (int i = 0; i < ochomps.size(); i++)
 		ochomps.at(i)->setOnVine(false);
-	
+
 }
 
 
@@ -213,7 +213,7 @@ void Game::buildLevelOne()
 {
 	if (!music.openFromFile("Sprites\\yes.ogg"))
 		std::cout << "Not working" << std::endl; // error
-	//music.play();
+												 //music.play();
 
 	plats.push_back(new Platform(5, 0, 562, 1));//1
 	plats.push_back(new Platform(2, 185, 524, 1));//2
@@ -227,7 +227,7 @@ void Game::buildLevelOne()
 	plats.push_back(new Platform(13, 0, 168, 2));//10
 	plats.push_back(new Platform(2, 80, 93, 2));//11
 
-	//Long first two
+												//Long first two
 	vines.push_back(new Vine(13, 1, 189));
 	vines.push_back(new Vine(13, 57, 189));
 	//Short ones next to the two plats

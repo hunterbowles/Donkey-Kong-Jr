@@ -11,7 +11,7 @@ OChomp::OChomp(int x, int y) : Chomp(x, y)
 {
 	open.setTextureRect(sf::IntRect(38, 229, 17, 12));
 	closed.setTextureRect(sf::IntRect(56, 229, 18, 12));
-	
+
 }
 
 
