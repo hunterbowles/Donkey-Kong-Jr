@@ -15,7 +15,7 @@ Player::Player(double x, double y) : GameObject(x, y)
 	{
 		up[i].setTexture(texture);
 		up[i].setScale(sf::Vector2f(2, 2));
-		up[i].setColor(sf::Color::White);	
+		up[i].setColor(sf::Color::White);
 
 		jump[i].setTexture(texture);
 		jump[i].setScale(sf::Vector2f(2, 2));
@@ -116,7 +116,7 @@ void Player::input()
 			else if (!getOnPlat())
 				spriteType = 11;
 		}
-		else if(!pressAgain)
+		else if (!pressAgain)
 		{
 			if (spriteType != 16)
 			{
@@ -163,7 +163,7 @@ void Player::input()
 			else if (!getOnPlat())
 				spriteType = 13;
 		}
-		else if(!pressAgain)
+		else if (!pressAgain)
 		{
 			if (spriteType != 15)
 			{
@@ -201,6 +201,7 @@ void Player::input()
 	{
 		pressAgain = false;
 	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		if (getOnVine())
@@ -231,7 +232,7 @@ void Player::input()
 			//like he is moving really fast if you do.
 
 			setVY(3);
-			if(dualCollide)
+			if (dualCollide)
 				setVY(3);
 			counter++;
 			if (counter % 3 == 0)
@@ -246,6 +247,7 @@ void Player::input()
 			}
 		}
 	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		//Keep the sprite the same until DK Jr is about to hit
@@ -270,9 +272,9 @@ void Player::input()
 
 void Player::changeSprite()
 {
-	switch(spriteType)
+	switch (spriteType)
 	{
-	case 1: 
+	case 1:
 		setSprite(right[0]);
 		break;
 	case 2:
@@ -328,12 +330,12 @@ void Player::changeSprite()
 
 void Player::step()
 {
-	if (getOnVine() && (spriteType != 15 
-		&& spriteType != 8 && spriteType != 7 
+	if (getOnVine() && (spriteType != 15
+		&& spriteType != 8 && spriteType != 7
 		&& spriteType != 10 && spriteType != 9 && spriteType != 16))
 		spriteType = 7;
-	else if (getOnVine() && (spriteType != 15 && spriteType != 8 
-		&& spriteType != 7 && spriteType != 10 
+	else if (getOnVine() && (spriteType != 15 && spriteType != 8
+		&& spriteType != 7 && spriteType != 10
 		&& spriteType != 9 && spriteType != 16)
 		&& (spriteType == 0 || spriteType == 1 || spriteType == 2))
 		spriteType = 9;
@@ -353,8 +355,8 @@ void Player::step()
 void Player::doubleCollide(Vine v, Vine vv)
 {
 	dualCollide = true;
-	
-	if(counter % 3 == 0)
+
+	if (counter % 3 == 0)
 		spriteType = (counter % 2) + 13;
 }
 

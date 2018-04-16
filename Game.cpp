@@ -234,17 +234,17 @@ void Game::buildLevelOne()
 	vines.push_back(new Vine(2, 112, 301));
 	vines.push_back(new Vine(4, 112, 413));
 	//Middle two
-	vines.push_back(new Vine(9, 206, 189));
+	vines.push_back(new Vine(9, 200, 189));
 	vines.push_back(new Vine(6, 280, 189));
 	//Middle Right
 	vines.push_back(new Vine(10, 335, 206));
 	vines.push_back(new Vine(8, 391, 206));
 	//Right top
-	vines.push_back(new Vine(7, 440, 112));
-	vines.push_back(new Vine(7, 496, 112));
+	vines.push_back(new Vine(7, 447, 112));
+	vines.push_back(new Vine(7, 503, 112));
 	//Right Bottom
-	vines.push_back(new Vine(3, 440, 356));
-	vines.push_back(new Vine(3, 496, 356));
+	vines.push_back(new Vine(3, 447, 356));
+	vines.push_back(new Vine(3, 503, 356));
 	//Lil boi
 	vines.push_back(new Vine(2, 180, 80));
 

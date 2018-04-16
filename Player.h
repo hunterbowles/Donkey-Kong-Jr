@@ -28,7 +28,7 @@ public:
 
 private:
 	int lives, score, counter, spriteType;
-	bool dualCollide;
+	bool dualCollide, pressAgain;
 	sf::Sprite right[3], left[3], up[4], jump[4], grab[2];
 	sf::Texture texture;
 };
