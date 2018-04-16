@@ -73,6 +73,7 @@ Player::Player(double x, double y) : GameObject(x, y)
 	setTeam(1);
 	setLives(3);
 	setScore(0);
+	pressAgain = false;
 }
 Player::~Player()
 {
@@ -115,7 +116,7 @@ void Player::input()
 			else if (!getOnPlat())
 				spriteType = 11;
 		}
-		else
+		else if(!pressAgain)
 		{
 			if (spriteType != 16)
 			{
@@ -146,7 +147,7 @@ void Player::input()
 				setX(getX() + 30);
 			}
 			//Make sure that the Left arrow is not pressed more than once.
-			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {}
+			pressAgain = true;
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -162,7 +163,7 @@ void Player::input()
 			else if (!getOnPlat())
 				spriteType = 13;
 		}
-		else
+		else if(!pressAgain)
 		{
 			if (spriteType != 15)
 			{
@@ -190,11 +191,15 @@ void Player::input()
 			else if (dualCollide && spriteType == 15)
 			{
 				spriteType = 9;
-				setX(getX() - 6);
+				setX(getX() - 10);
 			}
 			//Make sure that the Left arrow is not pressed more than once.
-			while (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {}
+			pressAgain = true;
 		}
+	}
+	else
+	{
+		pressAgain = false;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
