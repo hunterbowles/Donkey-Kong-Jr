@@ -363,16 +363,9 @@ void Player::doubleCollide(Vine v, Vine vv)
 
 void Player::die()
 {
-	if (getLives() != 1000)
-	{
-		setLives(getLives() - 1);
-		setX(20);
-		setY(500);
-	}
-	else
-	{
-		std::cout << "GG";
-	}
+	setLives(getLives() - 1);
+	setX(0);
+	setY(500);
 }
 
 
