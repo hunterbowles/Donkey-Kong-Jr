@@ -5,9 +5,11 @@
 #include "Vine.h"
 #include "Chomp.h"
 #include "OChomp.h"
+#include "Fruit.h"
 #include <iostream>
 #include <vector>
 #include <Windows.h>
+#include <time.h>
 #include <string>
 #include <SFML\Audio.hpp>
 
@@ -28,6 +30,7 @@ public:
 	void buildLevelTwo();
 	void buildLevelThree();
 	void buildLevelFour();
+	void clearAll();
 private:
 	Player* p;
 	sf::RenderWindow window;
@@ -39,5 +42,8 @@ private:
 	sf::Font f;
 	sf::Text lives, score;
 	sf::Event event;
+	sf::Texture t;
+	//sf::Sprite key;
+	//Fruit fruit;
 };
 

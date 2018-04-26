@@ -4,6 +4,7 @@
 
 Game::Game()
 {
+	srand(time(NULL));
 	window.create(sf::VideoMode(520, 600), "DK Jr");
 	p = new Player(20, 500);
 
@@ -15,12 +16,23 @@ Game::Game()
 		std::cout << "you no good :(" << std::endl;
 	}
 
+	t.loadFromFile("Sprites/spritesheet.png");
+	//key.setTexture(t);
+
 	lives.setFont(f);
 	score.setFont(f);
 }
 
 
 Game::~Game()
+{
+	clearAll();
+
+	delete p;
+}
+
+
+void Game::clearAll()
 {
 	//Deletes all pointers in Plats
 	for (int i = 0; i< plats.size(); i++)
@@ -41,8 +53,6 @@ Game::~Game()
 	for (int i = 0; i< ochomps.size(); i++)
 		delete (ochomps[i]);
 	ochomps.clear();
-
-	delete p;
 }
 
 
@@ -60,6 +70,11 @@ void Game::play()
 			vineCheck();
 			chompCheck();
 			playerCheck();
+
+			//Testing Purposes. Make better pls
+			//window.draw(key);
+			//window.draw(fruit.getSprite());
+
 			window.display();
 			window.clear();
 		}
@@ -113,7 +128,7 @@ void Game::platformCheck()
 			if (!ochomps.at(j)->getOnVineAgain())
 				plats.at(i)->collision(ochomps.at(j));
 		}
-		plats.at(i)->drawPlat(window);
+		plats.at(i)->drawPlat(&window);
 	}
 }
 
@@ -185,6 +200,12 @@ void Game::playerCheck()
 			chomps.at(i)->setY(100);
 		}
 	}
+	/*
+	if (p->getBB().intersects(key.getGlobalBounds()))
+	{
+		buildLevelTwo();
+	}
+	*/
 
 	p->step();
 	window.draw(p->getSprite());
@@ -204,8 +225,21 @@ void Game::gameOver()
 	lives.setScale(5, 5);
 	lives.setPosition(window.getSize().x / 4 - 25, window.getSize().y / 4);
 	window.draw(lives);
+	lives.setString("Press Space to Play Again!");
+	lives.setScale(3, 3);
+	lives.setPosition(window.getSize().x / 8 - 25, window.getSize().y / 4 + 100);
+	window.draw(lives);
 	window.display();
 	window.clear();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		p->setLives(3);
+		p->setScore(0);
+		lives.setScale(1, 1);
+		clearAll();
+		buildLevelOne();
+	}
 }
 
 
@@ -254,12 +288,27 @@ void Game::buildLevelOne()
 
 	//orange bois
 	ochomps.push_back(new OChomp(200, 100));
+
+	//MAKE BETTER
+	/*key.setTextureRect(sf::IntRect(184, 68, 16, 17));
+	key.setScale(2, 2);
+	key.setPosition(87, 58);*/
+
+	//Fruit Testing
+	//fruit = Fruit(0, 0, 0);
 }
 
 
 void Game::buildLevelTwo()
 {
-
+	clearAll();
+	p->setScore(p->getScore() + 500);
+	plats.push_back(new Platform(5, 0, 562, 1));//1
+	vines.push_back(new Vine(13, 1, 189));
+	chomps.push_back(new Chomp(1150, 100));
+	ochomps.push_back(new OChomp(1200, 100));
+	p->setX(20);
+	p->setY(500);
 }
 
 
