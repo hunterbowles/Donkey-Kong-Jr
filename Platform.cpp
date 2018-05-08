@@ -45,6 +45,7 @@ Platform::~Platform()
 }
 
 
+//Method to see if an object is colliding with a platform.
 bool Platform::collision(GameObject * other)
 {
 	setBB(sf::FloatRect(sf::Vector2f(getX(), getY()),
@@ -92,6 +93,7 @@ bool Platform::collision(GameObject * other)
 }
 
 
+//Method to draw a platform.
 void Platform::drawPlat(sf::RenderWindow & window)
 {
 	for (int i = 0; i < length; i++)
@@ -100,6 +102,8 @@ void Platform::drawPlat(sf::RenderWindow & window)
 	}
 }
 
+
+//Method to dictate which sprite the platforms are.
 void Platform::setSprite(sf::Sprite sprite)
 {
 	setBB(sf::FloatRect(sf::Vector2f(getX(), getY()),
@@ -107,6 +111,7 @@ void Platform::setSprite(sf::Sprite sprite)
 }
 
 
+//Method to overide step.
 void Platform::step()
 {
 	setBB(sf::FloatRect(sf::Vector2f(getX(), getY()),

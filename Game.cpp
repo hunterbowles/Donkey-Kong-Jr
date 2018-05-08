@@ -6,7 +6,7 @@ Game::Game()
 {
 	srand(time(NULL));
 	window.create(sf::VideoMode(520, 600), "DK Jr");
-	p = new Player(20, 500);
+	p = new Player(10, 500);
 
 	window.setFramerateLimit(60);
 	//ShowWindow(GetConsoleWindow(), SW_HIDE);
@@ -17,10 +17,14 @@ Game::Game()
 	}
 
 	t.loadFromFile("Sprites/spritesheet.png");
-	//key.setTexture(t);
+	key.setTexture(t);
+
+	deathWait = false;
+	level = 1;
 
 	lives.setFont(f);
 	score.setFont(f);
+	levelsPlayed = 1;
 }
 
 
@@ -32,6 +36,7 @@ Game::~Game()
 }
 
 
+//Method to clear the game board.
 void Game::clearAll()
 {
 	//Deletes all pointers in Plats
@@ -56,6 +61,7 @@ void Game::clearAll()
 }
 
 
+//Method with the play loop.
 void Game::play()
 {
 	buildLevelOne();
@@ -64,19 +70,24 @@ void Game::play()
 	{
 		if (p->getLives() >= 0)
 		{
+			if (deathWait)
+			{
+				_sleep(2000);
+				deathWait = false;
+			}
 
 			nextStep();
 			platformCheck();
 			vineCheck();
 			chompCheck();
 			playerCheck();
-
-			//Testing Purposes. Make better pls
-			//window.draw(key);
-			//window.draw(fruit.getSprite());
-
 			window.display();
 			window.clear();
+
+			//Test Purposes. Make beeter pls
+			window.draw(key);
+
+			
 		}
 		else
 		{
@@ -94,6 +105,7 @@ void Game::play()
 }
 
 
+//Method to set up all the variables for the next step.
 void Game::nextStep()
 {
 	//Reset
@@ -109,6 +121,7 @@ void Game::nextStep()
 }
 
 
+//Method to see what is on a platform.
 void Game::platformCheck()
 {
 	//Check collisions with the platforms
@@ -128,11 +141,12 @@ void Game::platformCheck()
 			if (!ochomps.at(j)->getOnVineAgain())
 				plats.at(i)->collision(ochomps.at(j));
 		}
-		plats.at(i)->drawPlat(&window);
+		plats.at(i)->drawPlat(window);
 	}
 }
 
 
+//Method to see what is on a vine.
 void Game::vineCheck()
 {
 	//Check collisions with the vines
@@ -160,6 +174,7 @@ void Game::vineCheck()
 }
 
 
+//Method to see what is touching a chomp.
 void Game::chompCheck()
 {
 	//Check collision with the chomps
@@ -184,31 +199,50 @@ void Game::chompCheck()
 }
 
 
+//Method to check what the player is pressing.
 void Game::playerCheck()
 {
-	if (p->getTouchingEnemy() || p->getY() > window.getSize().y)
-	{
-		p->die();
-		for (int i = 0; i < ochomps.size(); i++)
-		{
-			ochomps.at(i)->setX(200);
-			ochomps.at(i)->setY(100);
-		}
-		for (int i = 0; i < chomps.size(); i++)
-		{
-			chomps.at(i)->setX(200);
-			chomps.at(i)->setY(100);
-		}
-	}
-	/*
-	if (p->getBB().intersects(key.getGlobalBounds()))
-	{
-		buildLevelTwo();
-	}
-	*/
 
-	p->step();
-	window.draw(p->getSprite());
+		if (p->getTouchingEnemy() || p->getY() > window.getSize().y)
+		{
+			p->die();
+			//Deletes all pointers in Chomps
+			for (int i = 0; i< chomps.size(); i++)
+				delete (chomps[i]);
+			chomps.clear();
+
+			//Deletes all pointers in Chomps
+			for (int i = 0; i< ochomps.size(); i++)
+				delete (ochomps[i]);
+			ochomps.clear();
+
+			buildChomps();
+
+			deathWait = true;
+		}
+		else
+		{
+			p->step();
+			window.draw(p->getSprite());
+		}
+
+		if (p->getBB().intersects(key.getGlobalBounds()))
+		{
+			switch (level)
+			{
+			case 1:
+				levelsPlayed++;
+				buildLevelTwo();
+				_sleep(2000);
+				break;
+			case 2:
+				levelsPlayed++;
+				buildLevelOne();
+				_sleep(2000);
+				break;
+			}
+			p->setScore(p->getScore() + 500);
+		}
 
 	lives.setPosition(5, 0);
 	lives.setString("Lives: " + std::to_string(p->getLives()));
@@ -219,6 +253,7 @@ void Game::playerCheck()
 }
 
 
+//Tell the user they have lost.
 void Game::gameOver()
 {
 	lives.setString("Game Over");
@@ -227,7 +262,7 @@ void Game::gameOver()
 	window.draw(lives);
 	lives.setString("Press Space to Play Again!");
 	lives.setScale(3, 3);
-	lives.setPosition(window.getSize().x / 8 - 25, window.getSize().y / 4 + 100);
+	lives.setPosition(window.getSize().x / 8 - 26, window.getSize().y / 4 + 100);
 	window.draw(lives);
 	window.display();
 	window.clear();
@@ -238,16 +273,92 @@ void Game::gameOver()
 		p->setScore(0);
 		lives.setScale(1, 1);
 		clearAll();
+		window.clear();
+		levelsPlayed = 1;
 		buildLevelOne();
+		p->setX(10);
+		p->setY(500);
 	}
 }
 
 
+//Build all the chomps.
+void Game::buildChomps()
+{
+	//blue bois
+	for (int i = 0; i < levelsPlayed; i++)
+	{
+		chomps.push_back(new Chomp(200, 100));
+		ochomps.push_back(new OChomp(200, 100));
+	}
+}
+
+
+//Build Level One.
 void Game::buildLevelOne()
 {
+	clearAll();
 	if (!music.openFromFile("Sprites\\yes.ogg"))
 		std::cout << "Not working" << std::endl; // error
-												 //music.play();
+	music.play();
+
+	plats.push_back(new Platform(5, 0, 562, 1));//1
+	plats.push_back(new Platform(2, 185, 524, 1));//2
+	plats.push_back(new Platform(2, 278, 543, 1));//3
+	plats.push_back(new Platform(2, 352, 524, 1));//4
+	plats.push_back(new Platform(2, 440, 506, 1));//5
+	plats.push_back(new Platform(4, 80, 393, 2));//6
+	plats.push_back(new Platform(3, 80, 280, 2));//7
+	plats.push_back(new Platform(5, 415, 337, 2));//8
+	plats.push_back(new Platform(5, 305, 188, 2));//9
+	plats.push_back(new Platform(13, 0, 168, 2));//10
+	plats.push_back(new Platform(2, 80, 93, 2));//11
+
+												//Long first two
+	vines.push_back(new Vine(13, 1, 189));
+	vines.push_back(new Vine(13, 57, 189));
+	//Short ones next to the two plats
+	vines.push_back(new Vine(2, 112, 301));
+	vines.push_back(new Vine(4, 112, 413));
+	//Middle two
+	vines.push_back(new Vine(9, 200, 189));
+	vines.push_back(new Vine(6, 280, 189));
+	//Middle Right
+	vines.push_back(new Vine(10, 335, 206));
+	vines.push_back(new Vine(8, 391, 206));
+	//Right top
+	vines.push_back(new Vine(7, 447, 112));
+	vines.push_back(new Vine(7, 503, 112));
+	//Right Bottom
+	vines.push_back(new Vine(3, 447, 356));
+	vines.push_back(new Vine(3, 503, 356));
+	//Lil boi
+	vines.push_back(new Vine(2, 180, 80));
+
+	buildChomps();
+
+	p->setX(10);
+	p->setY(500);
+
+	//MAKE BETTER
+	key.setTextureRect(sf::IntRect(189, 182, 16, 16));
+	key.setScale(2, 2);
+	key.setPosition(87, 58);
+
+	//Fruit Testing
+	//fruit = Fruit(0, 0, 0);
+
+	level = 1;
+}
+
+
+//Build Level Two.
+void Game::buildLevelTwo()
+{
+	clearAll();
+	if (!music.openFromFile("Sprites\\yes.ogg"))
+		std::cout << "Not working" << std::endl; // error
+	music.play();
 
 	plats.push_back(new Platform(5, 0, 562, 1));//1
 	plats.push_back(new Platform(2, 185, 524, 1));//2
@@ -282,41 +393,31 @@ void Game::buildLevelOne()
 	//Lil boi
 	vines.push_back(new Vine(2, 180, 80));
 
-	//blue bois
-	chomps.push_back(new Chomp(150, 100));
-	chomps.push_back(new Chomp(250, 100));
-
-	//orange bois
-	ochomps.push_back(new OChomp(200, 100));
+	buildChomps();
 
 	//MAKE BETTER
-	/*key.setTextureRect(sf::IntRect(184, 68, 16, 17));
+	key.setTextureRect(sf::IntRect(189, 182, 16, 16));
 	key.setScale(2, 2);
-	key.setPosition(87, 58);*/
+	key.setPosition(87, 58);
+
+	p->setX(10);
+	p->setY(500);
 
 	//Fruit Testing
 	//fruit = Fruit(0, 0, 0);
+
+	level = 2;
 }
 
 
-void Game::buildLevelTwo()
-{
-	clearAll();
-	p->setScore(p->getScore() + 500);
-	plats.push_back(new Platform(5, 0, 562, 1));//1
-	vines.push_back(new Vine(13, 1, 189));
-	chomps.push_back(new Chomp(1150, 100));
-	ochomps.push_back(new OChomp(1200, 100));
-	p->setX(20);
-	p->setY(500);
-}
-
-
+//Build Level Three.
 void Game::buildLevelThree()
 {
 
 }
 
+
+//Build Level Four.
 void Game::buildLevelFour()
 {
 

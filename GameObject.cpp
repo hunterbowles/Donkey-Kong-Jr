@@ -38,6 +38,7 @@ GameObject::~GameObject()
 }
 
 
+//Method to change the x and y position based on velocity.
 void GameObject::step()
 {
 	//Change x and y positions according to the velocity.
@@ -55,6 +56,7 @@ void GameObject::step()
 }
 
 
+//Method to see if one object is colliding with another.
 bool GameObject::collision(GameObject * other)
 {
 	if (other->team == team) //ignores same team collision
@@ -67,12 +69,14 @@ bool GameObject::collision(GameObject * other)
 }
 
 
+//Method to kill an object.
 void GameObject::die()
 {
 	
 }
 
 
+//Change the y velocity according to how strong gravity is.
 void GameObject::useGravity()
 {
 	if(!onVine)

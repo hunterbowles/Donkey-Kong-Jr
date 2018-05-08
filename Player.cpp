@@ -74,6 +74,7 @@ Player::Player(double x, double y) : GameObject(x, y)
 	setLives(3);
 	setScore(0);
 	pressAgain = false;
+	justDie = 0;
 }
 Player::~Player()
 {
@@ -270,8 +271,6 @@ void Player::input()
 }
 
 
-//Method to dictate which sprite Donkey Kong Jr. should be based
-//on the sprite int.
 void Player::changeSprite()
 {
 	switch (spriteType)
@@ -330,7 +329,6 @@ void Player::changeSprite()
 }
 
 
-//Method to overide step.
 void Player::step()
 {
 	if (getOnVine() && (spriteType != 15
@@ -355,7 +353,6 @@ void Player::step()
 }
 
 
-//Method to check if Donkey Kong Jr. is on two vines.
 void Player::doubleCollide(Vine v, Vine vv)
 {
 	dualCollide = true;
@@ -365,7 +362,6 @@ void Player::doubleCollide(Vine v, Vine vv)
 }
 
 
-//Method to overide die.
 void Player::die()
 {
 	setLives(getLives() - 1);
@@ -391,6 +387,10 @@ bool Player::getDualCollide()
 {
 	return dualCollide;
 }
+int Player::getJustDie()
+{
+	return justDie;
+}
 
 //Setters
 void Player::setLives(int i)
@@ -408,4 +408,8 @@ void Player::setSpriteType(int i)
 void Player::setDualCollide(bool set)
 {
 	dualCollide = set;
+}
+void Player::setJustDie(int set)
+{
+	justDie = set;
 }

@@ -9,6 +9,9 @@ Chomp::Chomp()
 	//EMPTY CONSTRUCTER WHHAT DO 
 }
 
+Chomp::~Chomp()
+{
+}
 
 Chomp::Chomp(int x, int y) : GameObject(x, y)
 {
@@ -44,6 +47,7 @@ Chomp::Chomp(int x, int y) : GameObject(x, y)
 }
 
 
+//Method to overide GameObject step.
 void Chomp::step()
 {
 	setX(getX() + getVX());
@@ -106,6 +110,8 @@ void Chomp::step()
 }
 
 
+//Method to dictate what happens when a chomp intersects
+//with a vine.
 bool Chomp::vineIntersect(Vine * v)
 {
 	if (vineBox.intersects(v->getBB()) && !onVine && rand() % 10 == 0)
@@ -122,6 +128,8 @@ bool Chomp::vineIntersect(Vine * v)
 	return false;
 }
 
+
+//Change rotation if a chomp is on a vine.
 void Chomp::changeRotation(double angle)
 {
 	open.setRotation(angle);
@@ -134,19 +142,15 @@ void Chomp::changeRotation(double angle)
 }
 
 
+//Bounding box.
 sf::FloatRect Chomp::getVineBox()
 {
 	return vineBox;
 }
 
 
+//Don't allow a chomp on two vines.
 bool Chomp::getOnVineAgain()
 {
 	return onVine;
 }
-
-
-Chomp::~Chomp()
-{
-}
-

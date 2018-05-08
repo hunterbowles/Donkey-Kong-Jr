@@ -5,13 +5,12 @@
 #include "Vine.h"
 #include "Chomp.h"
 #include "OChomp.h"
-#include "Fruit.h"
 #include <iostream>
 #include <vector>
 #include <Windows.h>
-#include <time.h>
 #include <string>
 #include <SFML\Audio.hpp>
+#include <time.h>
 
 
 class Game
@@ -27,6 +26,7 @@ public:
 	void playerCheck();
 	void gameOver();
 	void buildLevelOne();
+	void buildChomps();
 	void buildLevelTwo();
 	void buildLevelThree();
 	void buildLevelFour();
@@ -42,8 +42,9 @@ private:
 	sf::Font f;
 	sf::Text lives, score;
 	sf::Event event;
+	sf::Sprite key;
 	sf::Texture t;
-	//sf::Sprite key;
-	//Fruit fruit;
+	bool deathWait;
+	int level, levelsPlayed;
 };
 
